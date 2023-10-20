@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/quizz_brain.dart';
+
+QuizzBrain quizzBrain = QuizzBrain();
 
 void main() => runApp(const Quizzler());
 
@@ -29,21 +32,47 @@ class QuizzPage extends StatefulWidget {
 }
 
 class _QuizzPageState extends State<QuizzPage> {
+  List<Icon> scoreKeeper = [];
+
+  int questionNumber = 0;
+
+  void checkAnswer(bool choice) {
+    bool isAnswerCorrect = quizzBrain.questions[questionNumber].answer;
+
+    if (isAnswerCorrect == choice) {
+      scoreKeeper.add(const Icon(
+        Icons.check,
+        color: Colors.green,
+      ));
+    } else {
+      scoreKeeper.add(const Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+    }
+
+    setState(() {
+      questionNumber < quizzBrain.questions.length - 1
+          ? questionNumber++
+          : questionNumber = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        const Expanded(
+        Expanded(
           flex: 5,
           child: Padding(
-            padding: EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizzBrain.questions[questionNumber].question,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
@@ -68,7 +97,7 @@ class _QuizzPageState extends State<QuizzPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                checkAnswer(true);
               },
             ),
           ),
@@ -89,19 +118,15 @@ class _QuizzPageState extends State<QuizzPage> {
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
 }
-
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
