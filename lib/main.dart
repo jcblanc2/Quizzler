@@ -37,7 +37,7 @@ class _QuizzPageState extends State<QuizzPage> {
   int questionNumber = 0;
 
   void checkAnswer(bool choice) {
-    bool isAnswerCorrect = quizzBrain.questions[questionNumber].answer;
+    bool isAnswerCorrect = quizzBrain.getCorrectAnswer();
 
     if (isAnswerCorrect == choice) {
       scoreKeeper.add(const Icon(
@@ -52,9 +52,7 @@ class _QuizzPageState extends State<QuizzPage> {
     }
 
     setState(() {
-      questionNumber < quizzBrain.questions.length - 1
-          ? questionNumber++
-          : questionNumber = 0;
+      quizzBrain.getNextQuestion();
     });
   }
 
@@ -70,7 +68,7 @@ class _QuizzPageState extends State<QuizzPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizzBrain.questions[questionNumber].question,
+                quizzBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
