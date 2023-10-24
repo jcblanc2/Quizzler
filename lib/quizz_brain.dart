@@ -39,8 +39,20 @@ class QuizzBrain {
   }
 
   void getNextQuestion() {
-    _questionNumber < _questions.length - 1
-        ? _questionNumber++
-        : _questionNumber = 0;
+    if (_questionNumber < _questions.length - 1) {
+      _questionNumber++;
+    }
+  }
+
+  bool isFinished() {
+    if (_questionNumber >= _questions.length - 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void reset() {
+    _questionNumber = 0;
   }
 }
